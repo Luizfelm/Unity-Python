@@ -2,6 +2,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TCPClient : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class TCPClient : MonoBehaviour
     private NetworkStream stream;
     private byte[] buffer = new byte[1024]; // Buffer for incoming data
 
+    public GameObject cube;
     void Start()
     {
         try
@@ -39,8 +41,12 @@ public class TCPClient : MonoBehaviour
             int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
             // Convert the received bytes into a string
-            string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();               
-            Debug.Log("Received message: " + message);
+            string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+            string[] values = message.Split(" ");        
+            Vector3 position = new Vector3(0, -Int32.Parse(values[1])/100.0f, Int32.Parse(values[0])/100.0f);
+
+            cube.transform.position = position;
+            //Debug.Log("Received message: " + message);
         }
         
     }
